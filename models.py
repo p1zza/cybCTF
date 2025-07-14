@@ -41,9 +41,8 @@ sql_insert_products_table = """INSERT INTO products (id, name, price) VALUES
                                         """
 
 sql_insert_users_admin = """INSERT INTO users (id, user, password, adress ,isadmin) VALUES 
-                                    ('1', 'admin', 'HelloIAmAdmin','flag{fWNtSLGxPEOQByiellmvlhtH}', True),
-                                    ('2', 'Bob', 'DontTryToHack','', '0'),
-                                    ('3', 'Alice', 'DontTryToHackMeToo','', '0');
+                                    ('1', 'admin', 'SGVsbG9JQW1BZG1pbg','flag{fWNtSLGxPEOQByiellmvlhtH}', True),
+                                    ('2', 'Bob', 'DontTryToHack','', '0');
                                         """
 
 sql_insert_orders = """INSERT INTO orders (order_id, data,user) VALUES 
@@ -192,12 +191,12 @@ def insertUser(user,password):
     finally:
         if conn:
             conn.close()
+
 def updateUser(user,password):
     try:
         conn = sqlite3.connect(db_file)
         cur = conn.cursor()
-        cur.execute("UPDATE users SET password = ? WHERE user = ?;", (password,user))
-        row = cur.fetchall()
+        cur.execute("UPDATE users SET password = ? WHERE user = ?;", (password, user))
         conn.commit()
         return conn.total_changes
     except Error as e:
@@ -205,6 +204,7 @@ def updateUser(user,password):
     finally:
         if conn:
             conn.close()
+
 def getUser(user):
     row = ""
     try:

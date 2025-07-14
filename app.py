@@ -42,17 +42,28 @@ def products():
         flash("Продукт добавлен в корзину")
         return render_template("products.html",headings = headings, data = row)
 
-@app.route('/profile')
+@app.route('/profile', methods=['GET', 'POST'])
 @login_required
 def profile():
     content = {}
-    content ['username'] = []
-    content ['username'] = session['username']
+    content['username'] = session['username']
+    row = models.getOrdersByUser(session['username'])
+    
+    if request.method == 'POST':
+        new_password = request.form.get('new_password')
+        username = request.form.get('username') 
+        
+        if not validate(new_password):
+            flash("Пароль должен содержать только буквы и цифры")
+        else:
+            models.updateUser(username, new_password)
+            session['password'] = new_password
+            flash("Пароль успешно изменен")
+            return redirect(url_for('profile'))
+    
     flash("Флаг:")
     flash(session['flag'])
-    row = models.getOrdersByUser(session['username'])
-
-    return (render_template("profile.html",context = content, headings = ("Номер заказа","Время","Пользователь"), data = row))
+    return render_template("profile.html", context=content, headings=("Номер заказа", "Время", "Пользователь"), data=row)
     
 
 @app.route('/registration', methods=['GET', 'POST'])
@@ -166,7 +177,6 @@ def load_user(userlogin):
 
 
 def validate(s):
-    # Регулярное выражение для проверки, содержит ли строка только буквы и цифры
     regex = re.compile(r'^[a-zA-Z0-9]+$')
     ss = str(s)
     a = regex.match(str(s))
@@ -183,8 +193,8 @@ class UserLogin():
         self.__user=user
         return self
     def is_authenticated(self):
-
             return True
+    
     def is_active(self):
         return True
     def is_anonymous(self):

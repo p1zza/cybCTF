@@ -35,6 +35,21 @@
                 Добро пожаловать: {{context.username}}
             </ol>
         </div>
+
+        <div class="change-password-form">
+            <h3>Изменение пароля</h3>
+            <form method="POST" action="/profile">
+                <!--<input type="hidden" name="username" value="{{ context.username }}">-->
+                <div class="form-group">
+                    <label for="new_password">Новый пароль:</label>
+                    <li><input type="password" id="new_password" name="new_password" required></li>
+                    <label for="new_username">Никнейм:</label>
+                    <li><input type="username" id="new_username" name="new_username" required></li>
+                </div>
+                <button type="submit" class="btn-save">Сохранить</button>
+            </form>
+        </div>
+
         <table class = "table">
             <tr class = "table__header">
                 {% for header in headings %}
